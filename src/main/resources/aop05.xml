@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+	<!-- 1. Bean 등록 => Boy, Girl, MyAspect -->
+	<bean id="boy" class="aop05.Boy" />
+	<bean id="girl" class="aop05.Girl" />
+	<bean id="myAsp" class="aop05.MyAspect" />
+	
+	<!-- 2. Aop 설정  
+		1) 공통기능(Aspect) 으로 사용할 bean을 지정
+		2) 핵심적 관심사항(pointcut)을 등록 (매개변수 와 return 값 표현)  
+		3) 개별 advice 지정  : aop05.MyAspect 에 정의된 메서드들 
+	-->
+	<aop:config>
+		<aop:aspect ref="myAsp">
+			<aop:pointcut expression="execution(* do*(*,*))" id="myPointcut"/>
+			<aop:before method="myBefore" pointcut-ref="myPointcut"/>	
+			<aop:after-returning method="myAfter_returning" pointcut-ref="myPointcut" returning="result" />		
+			<aop:after-throwing method="myAfter_throwing" pointcut-ref="myPointcut" throwing="e" />
+			<aop:after method="myAfter" pointcut-ref="myPointcut" />
+		</aop:aspect>
+	</aop:config>
+	<!-- <aop:pointcut expression="execution(* do*(..))" id="myPointcut"/> -->
+
+
+
+</beans>
